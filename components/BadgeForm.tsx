@@ -74,7 +74,7 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
     >
       {/* Badge text */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="badge-text" className="text-sm font-semibold text-gray-800">
+        <label htmlFor="badge-text" className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>
           Badge text
         </label>
         <input
@@ -84,14 +84,30 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
           onChange={(e) => update({ text: e.target.value.slice(0, 120) })}
           maxLength={120}
           placeholder="e.g. Open Source · MVP · Champion"
-          className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          className="rounded-lg px-3 py-2.5 text-sm transition"
+          style={{
+            border: "1.5px solid var(--color-neutral-200)",
+            borderRadius: "var(--radius-md)",
+            color: "var(--color-neutral-900)",
+            background: "var(--color-neutral-0)",
+            outline: "none",
+            fontFamily: "var(--font-sans)",
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = "var(--color-brand-500)";
+            e.target.style.boxShadow = "0 0 0 3px rgba(139, 92, 246, 0.15)";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "var(--color-neutral-200)";
+            e.target.style.boxShadow = "none";
+          }}
         />
-        <p className="text-xs text-gray-400 text-right">{params.text.length}/120</p>
+        <p className="text-xs text-right" style={{ color: "var(--color-neutral-400)" }}>{params.text.length}/120</p>
       </div>
 
       {/* Shape selector */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-gray-800">Shape</label>
+        <label className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>Shape</label>
         <div className="grid grid-cols-5 gap-1.5">
           {SHAPE_OPTIONS.map((opt) => (
             <button
@@ -99,11 +115,22 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
               type="button"
               onClick={() => update({ shape: opt.value })}
               title={opt.description}
-              className={`flex flex-col items-center gap-0.5 px-1 py-2 rounded-lg text-xs border transition-all ${
+              className="flex flex-col items-center gap-0.5 px-1 py-2 rounded-lg text-xs transition-all"
+              style={
                 params.shape === opt.value
-                  ? "border-blue-500 bg-blue-50 ring-1 ring-blue-400 font-semibold text-blue-700"
-                  : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
-              }`}
+                  ? {
+                      border: "1.5px solid var(--color-brand-600)",
+                      background: "var(--color-brand-100)",
+                      color: "var(--color-brand-700)",
+                      boxShadow: "0 0 0 2px var(--color-brand-400)",
+                      fontWeight: 600,
+                    }
+                  : {
+                      border: "1.5px solid var(--color-neutral-200)",
+                      background: "var(--color-neutral-0)",
+                      color: "var(--color-neutral-500)",
+                    }
+              }
             >
               <ShapeIcon shape={opt.value} active={params.shape === opt.value} />
               <span>{opt.label}</span>
@@ -115,9 +142,9 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
       {/* Label (only for split shape) */}
       {params.shape === "split" && (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="badge-label" className="text-sm font-semibold text-gray-800">
+          <label htmlFor="badge-label" className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>
             Left label
-            <span className="ml-1.5 text-xs font-normal text-gray-400">(shown on the left tab)</span>
+            <span className="ml-1.5 text-xs font-normal" style={{ color: "var(--color-neutral-400)" }}>(shown on the left tab)</span>
           </label>
           <input
             id="badge-label"
@@ -126,14 +153,29 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
             onChange={(e) => update({ label: e.target.value.slice(0, 40) })}
             maxLength={40}
             placeholder="e.g. Status · Build · Version"
-            className="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            className="rounded-lg px-3 py-2.5 text-sm transition"
+            style={{
+              border: "1.5px solid var(--color-neutral-200)",
+              borderRadius: "var(--radius-md)",
+              color: "var(--color-neutral-900)",
+              background: "var(--color-neutral-0)",
+              outline: "none",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "var(--color-brand-500)";
+              e.target.style.boxShadow = "0 0 0 3px rgba(139, 92, 246, 0.15)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "var(--color-neutral-200)";
+              e.target.style.boxShadow = "none";
+            }}
           />
         </div>
       )}
 
       {/* Style picker — grouped by category */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-gray-800">Style</label>
+        <label className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>Style</label>
 
         {/* Category tabs */}
         <div className="flex flex-wrap gap-1">
@@ -142,11 +184,20 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
               key={group.category}
               type="button"
               onClick={() => setActiveCategory(group.category)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${
+              className="px-3 py-1 rounded-full text-xs font-medium transition-all"
+              style={
                 activeCategory === group.category
-                  ? "bg-gray-900 text-white border-gray-900"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
-              }`}
+                  ? {
+                      background: "var(--color-brand-950)",
+                      color: "#ffffff",
+                      border: "1px solid var(--color-brand-950)",
+                    }
+                  : {
+                      background: "var(--color-neutral-0)",
+                      color: "var(--color-neutral-500)",
+                      border: "1px solid var(--color-neutral-200)",
+                    }
+              }
             >
               {group.label}
             </button>
@@ -165,11 +216,22 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
                   type="button"
                   onClick={() => update({ style: styleName as BadgeStyle })}
                   title={theme.uiLabel}
-                  className={`flex flex-col items-center gap-1 px-1 py-2 rounded-lg text-xs border transition-all ${
+                  className="flex flex-col items-center gap-1 px-1 py-2 rounded-lg text-xs transition-all"
+                  style={
                     isSelected
-                      ? "border-blue-500 ring-1 ring-blue-400 bg-blue-50 font-semibold text-blue-700"
-                      : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
-                  }`}
+                      ? {
+                          border: "1.5px solid var(--color-brand-600)",
+                          background: "var(--color-brand-100)",
+                          color: "var(--color-brand-700)",
+                          boxShadow: "0 0 0 2px var(--color-brand-400)",
+                          fontWeight: 600,
+                        }
+                      : {
+                          border: "1.5px solid var(--color-neutral-200)",
+                          background: "var(--color-neutral-0)",
+                          color: "var(--color-neutral-500)",
+                        }
+                  }
                 >
                   {/* Swatch — shows the actual background + accent colors */}
                   <StyleSwatch theme={theme} />
@@ -183,21 +245,29 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
 
       {/* Emoji prefix */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-gray-800">Emoji prefix</label>
+        <label className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>Emoji prefix</label>
         <div className="flex flex-wrap gap-1.5 items-center">
           {EMOJI_PRESETS.map((emoji) => (
             <button
               key={emoji === "" ? "none" : emoji}
               type="button"
               onClick={() => update({ emojiPrefix: emoji })}
-              className={`px-2 py-1 rounded-md text-sm border transition-colors ${
+              className="px-2 py-1 rounded-md text-sm transition-colors"
+              style={
                 params.emojiPrefix === emoji
-                  ? "border-blue-500 bg-blue-50 ring-1 ring-blue-400"
-                  : "border-gray-200 bg-white hover:bg-gray-50"
-              }`}
+                  ? {
+                      border: "1.5px solid var(--color-brand-500)",
+                      background: "var(--color-brand-50)",
+                      boxShadow: "0 0 0 1px var(--color-brand-400)",
+                    }
+                  : {
+                      border: "1px solid var(--color-neutral-200)",
+                      background: "var(--color-neutral-0)",
+                    }
+              }
               title={emoji === "" ? "No emoji" : emoji}
             >
-              {emoji === "" ? <span className="text-gray-400 text-xs">none</span> : emoji}
+              {emoji === "" ? <span className="text-xs" style={{ color: "var(--color-neutral-400)" }}>none</span> : emoji}
             </button>
           ))}
           {/* Custom emoji input */}
@@ -206,7 +276,20 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
             value={params.emojiPrefix}
             onChange={(e) => update({ emojiPrefix: e.target.value.slice(0, 8) })}
             placeholder="custom"
-            className="w-20 border border-gray-200 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-20 rounded-md px-2 py-1 text-sm"
+            style={{
+              border: "1px solid var(--color-neutral-200)",
+              borderRadius: "var(--radius-md)",
+              outline: "none",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "var(--color-brand-500)";
+              e.target.style.boxShadow = "0 0 0 2px rgba(139, 92, 246, 0.15)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "var(--color-neutral-200)";
+              e.target.style.boxShadow = "none";
+            }}
             title="Type a custom emoji"
           />
         </div>
@@ -217,10 +300,10 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
         {/* Width */}
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center">
-            <label htmlFor="badge-width" className="text-sm font-semibold text-gray-800">
+            <label htmlFor="badge-width" className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>
               Width
             </label>
-            <span className="text-xs text-gray-500 tabular-nums">{params.width}px</span>
+            <span className="text-xs tabular-nums" style={{ color: "var(--color-neutral-500)" }}>{params.width}px</span>
           </div>
           <input
             id="badge-width"
@@ -230,9 +313,10 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
             step={10}
             value={params.width}
             onChange={(e) => update({ width: parseInt(e.target.value, 10) })}
-            className="w-full accent-blue-500"
+            className="w-full"
+            style={{ accentColor: "var(--color-brand-600)" }}
           />
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs" style={{ color: "var(--color-neutral-400)" }}>
             <span>80</span>
             <span>600</span>
           </div>
@@ -241,10 +325,10 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
         {/* Font size */}
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center">
-            <label htmlFor="badge-font-size" className="text-sm font-semibold text-gray-800">
+            <label htmlFor="badge-font-size" className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>
               Font size
             </label>
-            <span className="text-xs text-gray-500 tabular-nums">{params.fontSize}px</span>
+            <span className="text-xs tabular-nums" style={{ color: "var(--color-neutral-500)" }}>{params.fontSize}px</span>
           </div>
           <input
             id="badge-font-size"
@@ -254,9 +338,10 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
             step={1}
             value={params.fontSize}
             onChange={(e) => update({ fontSize: parseInt(e.target.value, 10) })}
-            className="w-full accent-blue-500"
+            className="w-full"
+            style={{ accentColor: "var(--color-brand-600)" }}
           />
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs" style={{ color: "var(--color-neutral-400)" }}>
             <span>10</span>
             <span>40</span>
           </div>
@@ -265,18 +350,29 @@ export default function BadgeForm({ onChange }: BadgeFormProps) {
 
       {/* Font weight */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold text-gray-800">Font weight</label>
+        <label className="text-sm font-semibold" style={{ color: "var(--color-neutral-900)" }}>Font weight</label>
         <div className="grid grid-cols-4 gap-1.5">
           {FONT_WEIGHT_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               type="button"
               onClick={() => update({ fontWeight: opt.value })}
-              className={`px-2 py-2 rounded-lg text-xs border transition-colors ${
+              className="px-2 py-2 rounded-lg text-xs transition-colors"
+              style={
                 params.fontWeight === opt.value
-                  ? "border-blue-500 bg-blue-50 ring-1 ring-blue-400 font-semibold text-blue-700"
-                  : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
-              }`}
+                  ? {
+                      border: "1.5px solid var(--color-brand-600)",
+                      background: "var(--color-brand-100)",
+                      color: "var(--color-brand-700)",
+                      boxShadow: "0 0 0 1px var(--color-brand-400)",
+                      fontWeight: 600,
+                    }
+                  : {
+                      border: "1px solid var(--color-neutral-200)",
+                      background: "var(--color-neutral-0)",
+                      color: "var(--color-neutral-500)",
+                    }
+              }
             >
               <span style={{ fontWeight: opt.value }}>{opt.label}</span>
             </button>
@@ -327,7 +423,8 @@ function StyleSwatch({ theme }: { theme: ReturnType<typeof getTheme> }) {
 
 /** Tiny SVG icon representing the badge shape */
 function ShapeIcon({ shape, active }: { shape: BadgeShape; active: boolean }) {
-  const color = active ? "#2563eb" : "#9ca3af";
+  // Brand violet when active, neutral gray otherwise
+  const color = active ? "#7c3aed" : "#9ca3af";
   switch (shape) {
     case "flat":
       return (
@@ -341,7 +438,7 @@ function ShapeIcon({ shape, active }: { shape: BadgeShape; active: boolean }) {
           <defs>
             <linearGradient id={`grad-${active}`} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor={color} />
-              <stop offset="100%" stopColor={active ? "#60a5fa" : "#d1d5db"} />
+              <stop offset="100%" stopColor={active ? "#a78bfa" : "#d1d5db"} />
             </linearGradient>
           </defs>
           <rect x="1" y="1" width="26" height="12" rx="6" fill={`url(#grad-${active})`} />
@@ -351,7 +448,7 @@ function ShapeIcon({ shape, active }: { shape: BadgeShape; active: boolean }) {
       return (
         <svg width="28" height="14" viewBox="0 0 28 14">
           <rect x="1" y="1" width="10" height="12" rx="3" fill={color} />
-          <rect x="12" y="1" width="15" height="12" rx="3" fill={active ? "#bfdbfe" : "#e5e7eb"} />
+          <rect x="12" y="1" width="15" height="12" rx="3" fill={active ? "#ddd6fe" : "#e5e7eb"} />
         </svg>
       );
     case "outline":
@@ -363,7 +460,7 @@ function ShapeIcon({ shape, active }: { shape: BadgeShape; active: boolean }) {
     case "glass":
       return (
         <svg width="28" height="14" viewBox="0 0 28 14">
-          <rect x="1" y="1" width="26" height="12" rx="6" fill={active ? "#93c5fd" : "#d1d5db"} opacity="0.6" />
+          <rect x="1" y="1" width="26" height="12" rx="6" fill={active ? "#c4b5fd" : "#d1d5db"} opacity="0.6" />
           <rect x="3" y="2" width="22" height="5" rx="3" fill="white" opacity="0.5" />
         </svg>
       );

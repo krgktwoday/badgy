@@ -3,21 +3,112 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* === BRAND COLORS — Badgy Violet === */
+  --color-brand-50:   #f5f3ff;
+  --color-brand-100:  #ede9fe;
+  --color-brand-200:  #ddd6fe;
+  --color-brand-300:  #c4b5fd;
+  --color-brand-400:  #a78bfa;
+  --color-brand-500:  #8b5cf6;
+  --color-brand-600:  #7c3aed;
+  --color-brand-700:  #6d28d9;
+  --color-brand-800:  #5b21b6;
+  --color-brand-900:  #4c1d95;
+  --color-brand-950:  #2e1065;
+
+  /* === ACCENT — Coral Joy === */
+  --color-accent-400: #fb7185;
+  --color-accent-500: #f43f5e;
+  --color-accent-600: #e11d48;
+
+  /* === NEUTRALS — Warm Slate === */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #fafaf9;
+  --color-neutral-100: #f5f5f4;
+  --color-neutral-200: #e7e5e4;
+  --color-neutral-300: #d6d3d1;
+  --color-neutral-400: #a8a29e;
+  --color-neutral-500: #78716c;
+  --color-neutral-700: #44403c;
+  --color-neutral-900: #1c1917;
+
+  /* === SEMANTIC === */
+  --color-success-500: #22c55e;
+  --color-warning-500: #f59e0b;
+  --color-error-500:   #ef4444;
+  --color-info-500:    #06b6d4;
+
+  /* === GRADIENTS === */
+  --gradient-canvas: linear-gradient(135deg, #f5f3ff 0%, #fafaf9 50%, #fdf4ff 100%);
+  --gradient-cta:    linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --gradient-hero:   linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+
+  /* === TYPOGRAPHY === */
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "Fira Code", monospace;
+
+  --text-display: clamp(2.5rem, 6vw, 3rem);
+  --text-h1:      clamp(1.75rem, 4vw, 2rem);
+  --text-h2:      1.25rem;
+  --text-h3:      1rem;
+  --text-body-lg: 1rem;
+  --text-body:    0.875rem;
+  --text-label:   0.8125rem;
+  --text-caption: 0.75rem;
+  --text-mono:    0.75rem;
+
+  /* === SPACING (4px base) === */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* === BORDER RADIUS === */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* === SHADOWS === */
+  --shadow-xs:    0 1px 2px 0 rgba(15, 10, 30, 0.06);
+  --shadow-sm:    0 1px 3px 0 rgba(15, 10, 30, 0.08), 0 1px 2px -1px rgba(15, 10, 30, 0.06);
+  --shadow-md:    0 4px 6px -1px rgba(15, 10, 30, 0.08), 0 2px 4px -2px rgba(15, 10, 30, 0.05);
+  --shadow-lg:    0 10px 15px -3px rgba(15, 10, 30, 0.08), 0 4px 6px -4px rgba(15, 10, 30, 0.04);
+  --shadow-brand: 0 4px 14px 0 rgba(124, 58, 237, 0.25);
+
+  /* === MOTION === */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* === LAYOUT === */
+  --layout-max-width:  1120px;
+  --layout-gutter:     clamp(16px, 4vw, 32px);
+  --layout-content-max: 840px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration:  0.01ms !important;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-neutral-900);
+  background: var(--gradient-canvas);
+  font-family: var(--font-sans);
+  min-height: 100vh;
 }
 
 @layer utilities {

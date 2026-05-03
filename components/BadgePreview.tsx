@@ -91,7 +91,13 @@ export default function BadgePreview({ params }: BadgePreviewProps) {
 
   if (!params.text.trim()) {
     return (
-      <div className="flex items-center justify-center h-24 rounded-lg border-2 border-dashed border-gray-200 text-gray-400 text-sm">
+      <div
+        className="flex items-center justify-center h-24 rounded-lg border-2 border-dashed text-sm"
+        style={{
+          borderColor: "var(--color-neutral-200)",
+          color: "var(--color-neutral-400)",
+        }}
+      >
         Enter text to preview your badge
       </div>
     );
@@ -100,34 +106,66 @@ export default function BadgePreview({ params }: BadgePreviewProps) {
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       {/* Live preview via img tag — loads the SVG from the API */}
-      <div className="flex items-center justify-center p-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 w-full min-h-[96px] shadow-inner">
+      <div
+        className="flex items-center justify-center p-8 rounded-xl w-full min-h-[96px] shadow-inner"
+        style={{
+          background: "linear-gradient(135deg, var(--color-brand-50) 0%, var(--color-brand-100) 100%)",
+          border: "1px solid var(--color-brand-200)",
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={apiPath}
           alt={`Badge: ${params.text}`}
           className="max-w-full drop-shadow-sm"
           key={apiPath}
+          style={{ opacity: 1, transition: "opacity var(--duration-base) var(--ease-out)" }}
         />
       </div>
 
       {/* Shareable URL display */}
       <div className="w-full">
-        <p className="text-xs font-medium text-gray-500 mb-1">Share link</p>
+        <p className="text-xs font-medium mb-1" style={{ color: "var(--color-neutral-500)" }}>Share link</p>
         <div className="flex gap-2 items-center">
           <input
             readOnly
             value={typeof window !== "undefined" ? `${window.location.origin}${sharePath}` : sharePath}
-            className="flex-1 min-w-0 border border-gray-200 rounded-md px-3 py-1.5 text-xs text-gray-600 bg-gray-50 font-mono truncate focus:outline-none focus:ring-1 focus:ring-blue-400"
-            onFocus={(e) => e.target.select()}
+            className="flex-1 min-w-0 rounded-md px-3 py-1.5 text-xs truncate"
+            style={{
+              border: "1px solid var(--color-neutral-200)",
+              borderRadius: "var(--radius-md)",
+              color: "var(--color-neutral-500)",
+              background: "var(--color-neutral-50)",
+              fontFamily: "var(--font-mono)",
+              outline: "none",
+            }}
+            onFocus={(e) => {
+              e.target.select();
+              e.target.style.borderColor = "var(--color-brand-400)";
+              e.target.style.boxShadow = "0 0 0 2px rgba(139, 92, 246, 0.15)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "var(--color-neutral-200)";
+              e.target.style.boxShadow = "none";
+            }}
             aria-label="Shareable badge permalink"
           />
           <button
             onClick={handleCopyShareLink}
-            className={`shrink-0 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            className="shrink-0 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+            style={
               copyState === "copied"
-                ? "bg-green-500 text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
+                ? {
+                    background: "var(--color-success-500)",
+                    color: "#ffffff",
+                    border: "none",
+                  }
+                : {
+                    border: "1px solid var(--color-neutral-200)",
+                    color: "var(--color-neutral-700)",
+                    background: "transparent",
+                  }
+            }
           >
             {copyState === "copied" ? "Copied!" : "Copy"}
           </button>
@@ -136,25 +174,65 @@ export default function BadgePreview({ params }: BadgePreviewProps) {
 
       {/* Action buttons */}
       <div className="flex gap-2 flex-wrap justify-center">
+        {/* Primary CTA — Download SVG with brand gradient and glow */}
         <button
           onClick={handleDownload}
-          className="px-4 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 rounded-full text-sm font-semibold text-white transition-all"
+          style={{
+            background: "var(--gradient-cta)",
+            boxShadow: "var(--shadow-brand)",
+            border: "none",
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.08)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.filter = "none"; }}
+          onMouseDown={(e) => { (e.currentTarget as HTMLButtonElement).style.filter = "brightness(0.95)"; }}
+          onMouseUp={(e) => { (e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.08)"; }}
         >
           Download SVG
         </button>
+
+        {/* Ghost button — Copy SVG */}
         <button
           onClick={handleCopySvg}
-          className="px-4 py-2 rounded-md text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+          className="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+          style={{
+            border: "1.5px solid var(--color-neutral-200)",
+            color: "var(--color-neutral-700)",
+            background: "transparent",
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--color-neutral-100)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
         >
           Copy SVG
         </button>
+
+        {/* Copy embed URL — shows success state */}
         <button
           onClick={handleCopyUrl}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors border ${
+          className="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+          style={
             copyState === "copied"
-              ? "bg-green-500 text-white border-green-500"
-              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-          }`}
+              ? {
+                  background: "var(--color-success-500)",
+                  color: "#ffffff",
+                  border: "none",
+                }
+              : {
+                  border: "1.5px solid var(--color-neutral-200)",
+                  color: "var(--color-neutral-700)",
+                  background: "transparent",
+                }
+          }
+          onMouseEnter={(e) => {
+            if (copyState !== "copied") {
+              (e.currentTarget as HTMLButtonElement).style.background = "var(--color-neutral-100)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (copyState !== "copied") {
+              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+            }
+          }}
         >
           {copyState === "copied" ? "Copied!" : "Copy embed URL"}
         </button>

@@ -19,13 +19,20 @@ export default function Home() {
   const [params, setParams] = useState<BadgeParams>(DEFAULT_PARAMS);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex flex-col items-center py-10 px-4 sm:py-16">
+    <main className="min-h-screen flex flex-col items-center py-10 px-4 sm:py-16" style={{ background: "var(--gradient-canvas)" }}>
       {/* Header */}
       <header className="mb-10 text-center">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight mb-3">
+        <h1
+          className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3"
+          style={{
+            fontFamily: "var(--font-sans)",
+            color: "var(--color-brand-950)",
+            letterSpacing: "-0.02em",
+          }}
+        >
           Badgy
         </h1>
-        <p className="text-gray-500 text-base sm:text-lg max-w-sm mx-auto">
+        <p className="text-base sm:text-lg max-w-sm mx-auto" style={{ color: "var(--color-neutral-500)" }}>
           Create beautiful digital badges instantly. No account needed.
         </p>
       </header>
@@ -33,19 +40,43 @@ export default function Home() {
       {/* Two-column on desktop, stacked on mobile */}
       <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Left: form */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-base font-semibold text-gray-700 mb-5">Customise your badge</h2>
+        <section
+          className="rounded-2xl p-6"
+          style={{
+            background: "var(--color-neutral-0)",
+            border: "1px solid var(--color-neutral-200)",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <h2
+            className="text-base font-semibold mb-5"
+            style={{ color: "var(--color-neutral-700)" }}
+          >
+            Customise your badge
+          </h2>
           <BadgeForm onChange={setParams} />
         </section>
 
         {/* Right: preview */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-6">
-          <h2 className="text-base font-semibold text-gray-700 mb-5">Preview &amp; export</h2>
+        <section
+          className="rounded-2xl p-6 lg:sticky lg:top-6"
+          style={{
+            background: "var(--color-neutral-0)",
+            border: "1px solid var(--color-neutral-200)",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <h2
+            className="text-base font-semibold mb-5"
+            style={{ color: "var(--color-neutral-700)" }}
+          >
+            Preview &amp; export
+          </h2>
           <BadgePreview params={params} />
         </section>
       </div>
 
-      <footer className="mt-14 text-xs text-gray-400 text-center">
+      <footer className="mt-14 text-xs text-center" style={{ color: "var(--color-neutral-400)" }}>
         Made with love by the Badgy team &mdash; digital self-expression for everyone.
       </footer>
     </main>
