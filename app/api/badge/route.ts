@@ -1,12 +1,14 @@
 /**
  * /api/badge — badge generation endpoint
  *
- * GET /api/badge?text=Hello&style=success&width=300&fontSize=20&fontWeight=700&emojiPrefix=🚀
+ * GET /api/badge?text=Hello&style=champions&shape=gradient&width=300&fontSize=20&fontWeight=700&emojiPrefix=🏆&label=MVP
  *
  * Query params:
- *   text        (required) — the badge text
- *   style       (optional) — default | success | warning | danger | info | purple | pink | dark | ocean | sunset
- *   width       (optional) — badge width in px (80–600, default: 200)
+ *   text        (required) — the badge text (max 120 chars)
+ *   style       (optional) — one of the available style names (default: "default")
+ *   shape       (optional) — flat | gradient | split | outline | glass (default: "flat")
+ *   label       (optional) — left-side label for split shape
+ *   width       (optional) — badge width in px (80–600, default: 220)
  *   height      (optional) — badge height in px (32–200, default: 48)
  *   fontSize    (optional) — font size in px (10–48, default: 18)
  *   fontWeight  (optional) — 400 | 500 | 600 | 700 (default: 600)
@@ -17,7 +19,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { generateBadgeSvg, BadgeStyle, VALID_STYLES } from "@/lib/badge";
+import {
+  generateBadgeSvg,
+  BadgeStyle,
+  BadgeShape,
+  VALID_STYLES,
+  VALID_SHAPES,
+} from "@/lib/badge";
 import path from "path";
 import fs from "fs/promises";
 
@@ -60,9 +68,17 @@ export async function GET(request: NextRequest) {
     ? (rawStyle as BadgeStyle)
     : "default";
 
+  const rawShape = searchParams.get("shape") ?? "flat";
+  const shape: BadgeShape = VALID_SHAPES.includes(rawShape as BadgeShape)
+    ? (rawShape as BadgeShape)
+    : "flat";
+
+  // Label for split shape
+  const label = searchParams.get("label")?.trim().slice(0, 40) ?? undefined;
+
   const width = Math.min(
     600,
-    Math.max(80, parseInt(searchParams.get("width") ?? "200", 10) || 200)
+    Math.max(80, parseInt(searchParams.get("width") ?? "220", 10) || 220)
   );
   const height = Math.min(
     200,
@@ -87,7 +103,7 @@ export async function GET(request: NextRequest) {
   try {
     const fontData = await getFont();
     const svg = await generateBadgeSvg(
-      { text, style, width, height, fontSize, fontWeight, emojiPrefix },
+      { text, style, shape, label, width, height, fontSize, fontWeight, emojiPrefix },
       fontData
     );
 

@@ -14,7 +14,10 @@ import Link from "next/link";
 interface BadgeSharePageProps {
   text: string;
   style: string;
+  shape: string;
+  label: string;
   width: number;
+  height: number;
   fontSize: number;
   fontWeight: number;
   emojiPrefix: string;
@@ -23,7 +26,10 @@ interface BadgeSharePageProps {
 export default function BadgeSharePage({
   text,
   style,
+  shape,
+  label,
   width,
+  height,
   fontSize,
   fontWeight,
   emojiPrefix,
@@ -35,11 +41,14 @@ export default function BadgeSharePage({
   const apiParams = new URLSearchParams({
     text,
     style,
+    shape,
     width: String(width),
+    height: String(height),
     fontSize: String(fontSize),
     fontWeight: String(fontWeight),
   });
   if (emojiPrefix) apiParams.set("emojiPrefix", emojiPrefix);
+  if (shape === "split" && label) apiParams.set("label", label);
   const apiPath = `/api/badge?${apiParams.toString()}`;
 
   const displayText = emojiPrefix ? `${emojiPrefix} ${text}` : text;

@@ -9,17 +9,33 @@ interface BadgePreviewProps {
 
 // Build the relative API URL for the badge image
 function badgeApiPath(params: BadgeParams): string {
-  const { text, style, width, fontSize, fontWeight, emojiPrefix } = params;
-  const p = new URLSearchParams({ text, style, width: String(width), fontSize: String(fontSize), fontWeight: String(fontWeight) });
+  const { text, style, shape, label, width, fontSize, fontWeight, emojiPrefix } = params;
+  const p = new URLSearchParams({
+    text,
+    style,
+    shape,
+    width: String(width),
+    fontSize: String(fontSize),
+    fontWeight: String(fontWeight),
+  });
   if (emojiPrefix) p.set("emojiPrefix", emojiPrefix);
+  if (shape === "split" && label) p.set("label", label);
   return `/api/badge?${p.toString()}`;
 }
 
 // Build the shareable permalink path (/badge page)
 function badgeSharePath(params: BadgeParams): string {
-  const { text, style, width, fontSize, fontWeight, emojiPrefix } = params;
-  const p = new URLSearchParams({ text, style, width: String(width), fontSize: String(fontSize), fontWeight: String(fontWeight) });
+  const { text, style, shape, label, width, fontSize, fontWeight, emojiPrefix } = params;
+  const p = new URLSearchParams({
+    text,
+    style,
+    shape,
+    width: String(width),
+    fontSize: String(fontSize),
+    fontWeight: String(fontWeight),
+  });
   if (emojiPrefix) p.set("emojiPrefix", emojiPrefix);
+  if (shape === "split" && label) p.set("label", label);
   return `/badge?${p.toString()}`;
 }
 
@@ -84,12 +100,12 @@ export default function BadgePreview({ params }: BadgePreviewProps) {
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       {/* Live preview via img tag — loads the SVG from the API */}
-      <div className="flex items-center justify-center p-6 bg-gray-50 rounded-xl border border-gray-200 w-full">
+      <div className="flex items-center justify-center p-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200 w-full min-h-[96px] shadow-inner">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={apiPath}
           alt={`Badge: ${params.text}`}
-          className="max-w-full"
+          className="max-w-full drop-shadow-sm"
           key={apiPath}
         />
       </div>

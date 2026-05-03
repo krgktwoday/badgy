@@ -6,8 +6,10 @@ import BadgePreview from "@/components/BadgePreview";
 
 const DEFAULT_PARAMS: BadgeParams = {
   text: "My Badge",
-  style: "default",
-  width: 200,
+  style: "corporate",
+  shape: "gradient",
+  label: "Badgy",
+  width: 220,
   fontSize: 18,
   fontWeight: 600,
   emojiPrefix: "",
@@ -37,7 +39,7 @@ export default function Home() {
         </section>
 
         {/* Right: preview */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-6">
           <h2 className="text-base font-semibold text-gray-700 mb-5">Preview &amp; export</h2>
           <BadgePreview params={params} />
         </section>
