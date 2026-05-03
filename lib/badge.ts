@@ -8,7 +8,17 @@
 import { createElement as h } from "react";
 import satori from "satori";
 
-export type BadgeStyle = "default" | "success" | "warning" | "danger" | "info";
+export type BadgeStyle =
+  | "default"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "purple"
+  | "pink"
+  | "dark"
+  | "ocean"
+  | "sunset";
 
 export interface BadgeOptions {
   text: string;
@@ -17,6 +27,12 @@ export interface BadgeOptions {
   width?: number;
   /** Badge height in px (default: 48) */
   height?: number;
+  /** Font size in px (default: 18) */
+  fontSize?: number;
+  /** Font weight (default: 600) */
+  fontWeight?: 400 | 500 | 600 | 700;
+  /** Optional emoji prefix rendered before the text */
+  emojiPrefix?: string;
 }
 
 const STYLE_MAP: Record<
@@ -28,6 +44,11 @@ const STYLE_MAP: Record<
   warning: { bg: "#fef9c3", fg: "#854d0e", border: "#fde047" },
   danger:  { bg: "#fee2e2", fg: "#b91c1c", border: "#fca5a5" },
   info:    { bg: "#dbeafe", fg: "#1d4ed8", border: "#93c5fd" },
+  purple:  { bg: "#ede9fe", fg: "#6d28d9", border: "#c4b5fd" },
+  pink:    { bg: "#fce7f3", fg: "#be185d", border: "#f9a8d4" },
+  dark:    { bg: "#1f2937", fg: "#f9fafb", border: "#374151" },
+  ocean:   { bg: "#ecfeff", fg: "#0e7490", border: "#67e8f9" },
+  sunset:  { bg: "#fff7ed", fg: "#c2410c", border: "#fdba74" },
 };
 
 /**
@@ -38,8 +59,19 @@ export async function generateBadgeSvg(
   options: BadgeOptions,
   fontData: ArrayBuffer
 ): Promise<string> {
-  const { text, style = "default", width = 200, height = 48 } = options;
-  const colors = STYLE_MAP[style];
+  const {
+    text,
+    style = "default",
+    width = 200,
+    height = 48,
+    fontSize = 18,
+    fontWeight = 600,
+    emojiPrefix,
+  } = options;
+  const colors = STYLE_MAP[style] ?? STYLE_MAP.default;
+
+  // Build the display text: emoji prefix (if any) + main text
+  const displayText = emojiPrefix ? `${emojiPrefix} ${text}` : text;
 
   const svg = await satori(
     h(
@@ -55,6 +87,7 @@ export async function generateBadgeSvg(
           border: `2px solid ${colors.border}`,
           borderRadius: 8,
           padding: "0 16px",
+          gap: 0,
         },
       },
       h(
@@ -62,15 +95,15 @@ export async function generateBadgeSvg(
         {
           style: {
             color: colors.fg,
-            fontSize: 18,
-            fontWeight: 600,
+            fontSize,
+            fontWeight,
             letterSpacing: "0.01em",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
           },
         },
-        text
+        displayText
       )
     ),
     {
@@ -80,7 +113,7 @@ export async function generateBadgeSvg(
         {
           name: "Inter",
           data: fontData,
-          weight: 600,
+          weight: fontWeight,
           style: "normal",
         },
       ],
@@ -89,3 +122,6 @@ export async function generateBadgeSvg(
 
   return svg;
 }
+
+/** All valid style values — handy for validation in the API route. */
+export const VALID_STYLES: BadgeStyle[] = Object.keys(STYLE_MAP) as BadgeStyle[];
