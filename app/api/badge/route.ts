@@ -26,33 +26,11 @@ let fontCache: ArrayBuffer | null = null;
 
 async function getFont(): Promise<ArrayBuffer> {
   if (fontCache) return fontCache;
-  // Try bundled fonts in priority order:
-  //   1. Inter-SemiBold.ttf (if manually added)
-  //   2. NotoSans-Regular.ttf (bundled with this repo from @vercel/og)
-  const fontCandidates = [
-    path.join(process.cwd(), "app", "fonts", "Inter-SemiBold.ttf"),
-    path.join(process.cwd(), "app", "fonts", "NotoSans-Regular.ttf"),
-  ];
-  for (const fontPath of fontCandidates) {
-    try {
-      const buf = await fs.readFile(fontPath);
-      // Check for a valid OpenType/TrueType magic signature (not HTML)
-      const magic = buf[0];
-      if (magic === 0x00 || magic === 0x4f || magic === 0x74 || magic === 0x77) {
-        // \0\1\0\0 (TrueType), OTTO (CFF), true, wOFF, wOF2
-        fontCache = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
-        return fontCache;
-      }
-    } catch {
-      // file not found — try next
-    }
-  }
-  // Last resort: fetch from npm CDN (inter-latin-600-normal.woff2 via jsDelivr)
-  const res = await fetch(
-    "https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-600-normal.woff2"
-  );
-  if (!res.ok) throw new Error("Could not load font");
-  fontCache = await res.arrayBuffer();
+  // NotoSans-Regular.ttf is bundled in app/fonts — satori requires a valid
+  // OpenType/TrueType font buffer (WOFF2 is NOT supported by satori 0.26).
+  const fontPath = path.join(process.cwd(), "app", "fonts", "NotoSans-Regular.ttf");
+  const buf = await fs.readFile(fontPath);
+  fontCache = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
   return fontCache;
 }
 

@@ -111,7 +111,7 @@ export async function generateBadgeSvg(
       height,
       fonts: [
         {
-          name: "Inter",
+          name: "NotoSans",
           data: fontData,
           weight: fontWeight,
           style: "normal",
