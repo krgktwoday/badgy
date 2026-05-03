@@ -3,6 +3,7 @@
 import { useState } from "react";
 import BadgeForm, { BadgeParams } from "@/components/BadgeForm";
 import BadgePreview from "@/components/BadgePreview";
+import { Logo } from "@/components/Logo";
 
 const DEFAULT_PARAMS: BadgeParams = {
   text: "My Badge",
@@ -20,18 +21,13 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center py-10 px-4 sm:py-16" style={{ background: "var(--gradient-canvas)" }}>
-      {/* Header */}
+      {/* Header — logo lockup replaces text-only heading */}
       <header className="mb-10 text-center">
-        <h1
-          className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3"
-          style={{
-            fontFamily: "var(--font-sans)",
-            color: "var(--color-brand-950)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Badgy
-        </h1>
+        <div className="flex justify-center mb-3">
+          <Logo size="lg" />
+        </div>
+        {/* sr-only h1 preserves SEO heading; visible brand mark is the Logo SVG */}
+        <h1 className="sr-only">Badgy</h1>
         <p className="text-base sm:text-lg max-w-sm mx-auto" style={{ color: "var(--color-neutral-500)" }}>
           Create beautiful digital badges instantly. No account needed.
         </p>
